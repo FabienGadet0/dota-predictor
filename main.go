@@ -1,12 +1,15 @@
 package main
 
 import (
+	"dota-predictor/app/config"
+	"dota-predictor/app/handlers"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/gorilla/mux"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 //Set le port
@@ -20,9 +23,16 @@ func balanceTonPort() string {
 }
 
 func main() {
+	log.Println()
+	//initialize the database
+	config.InitDB()
+	defer config.DB.Close()
+
 	addr := balanceTonPort()
-	r := mux.NewRouter()
-	handleRequest(r)
+	r := mux.NewRouter().StrictSlash(true)
+
+	log.Println("Starting server")
+	handlers.HandleRequest(r)
 
 	log.Fatal(http.ListenAndServe(addr, r))
 }

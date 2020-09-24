@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"fmt"
@@ -7,12 +7,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//Gere toute les routes du serveur HTTP
-func handleRequest(router *mux.Router) {
+// HandleRequest gere toute les routes du serveur HTTP
+func HandleRequest(router *mux.Router) {
 	router.HandleFunc("/", index).Methods("GET")
 }
 
 //Base route
 func index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	fmt.Fprintf(w, "<h1>Hi there, welcome to the dota-predictor api !</h1>")
 }

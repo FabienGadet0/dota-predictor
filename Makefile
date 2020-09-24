@@ -2,8 +2,8 @@ all: go
 
 exec = dota-predictor
 
-go: src/*.go
-	go build -o bin/$(exec) src/*.go
+go: main.go
+	go build -o bin/$(exec) main.go
 
 clean:
 	rm -f bin/$(exec) *~ *#
@@ -12,5 +12,8 @@ clean:
 
 deps:
 	go get github.com/gorilla/mux
+	go get -u gorm.io/gorm
+	go get -u gorm.io/driver/sqlite
+
 
 re: clean all
