@@ -10,6 +10,7 @@ import (
 // HandleRequest gere toute les routes du serveur HTTP
 func HandleRequest(router *mux.Router) {
 	router.HandleFunc("/", index).Methods("GET")
+	router.HandleFunc("/user/create", create).Methods("POST")
 }
 
 //Base route

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -26,5 +25,5 @@ func InitDB() {
 		log.Fatal("Failed to ping database:\n" + err.Error())
 	}
 
-	fmt.Println("Successfully connected to database!")
+	log.Println("Successfully connected to database!")
 }
