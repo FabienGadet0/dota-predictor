@@ -3,7 +3,6 @@ package main
 import (
 	"dota-predictor/app/config"
 	"dota-predictor/app/handlers"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +16,7 @@ func balanceTonPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "4747"
-		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+		log.Println("INFO: No PORT environment variable detected, defaulting to " + port)
 	}
 	return ":" + port
 }
