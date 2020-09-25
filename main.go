@@ -23,7 +23,6 @@ func balanceTonPort() string {
 }
 
 func main() {
-	log.Println()
 	//initialize the database
 	config.InitDB()
 	defer config.DB.Close()
