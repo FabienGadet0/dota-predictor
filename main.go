@@ -16,7 +16,7 @@ func balanceTonPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "4747"
-		log.Println("INFO: No PORT environment variable detected, defaulting to " + port)
+		log.Println("INFO: No PORT environment variable detected, defaulting to " + port + ".")
 	}
 	return ":" + port
 }
@@ -29,7 +29,7 @@ func main() {
 	addr := balanceTonPort()
 	r := mux.NewRouter().StrictSlash(true)
 
-	log.Println("Starting server")
+	log.Println("Starting server.")
 	handlers.HandleRequest(r)
 
 	log.Fatal(http.ListenAndServe(addr, r))
