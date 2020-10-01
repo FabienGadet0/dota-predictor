@@ -4,14 +4,11 @@ exec = dota-predictor
 
 go: main.go
 	go build -o bin/$(exec) main.go
+	go generate
 
 clean:
 	rm -f bin/$(exec) *~ *#
 	rm -rf src/gopkg.in
-
-deps:
-	go get github.com/gorilla/mux
-	go get -u gorm.io/gorm
-	go get -u gorm.io/driver/sqlite
+	go mod tidy
 
 re: clean all

@@ -12,6 +12,11 @@ import (
 	"strconv"
 )
 
+// @Summary Create an user
+// @Produce json
+// @Success 200 {object} models.Response
+// @Failure 500 {object} models.Response
+// @Router /users/personnenetrouverajamaismaroutedecreationdutilisateur [post]
 func createUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -29,7 +34,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user = models.User{AccessToken: token, NBCallsLeft: call}
+	var user = models.Users{AccessToken: token, NBCallsLeft: call}
 
 	result := config.DB.Create(&user)
 	if result.Error != nil {
@@ -42,20 +47,27 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(models.Response{Code: 0, Data: result.Value})
 }
 
+// @Summary Get user credentials
+// @Produce json
+// @Param access_token header string false "Access Token"
+// @Success 200 {object} models.Response
+// @Failure 500 {object} models.Response
+// @Failure 404 {object} models.Response
+// @Router /users/stats [get]
 func getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	if !isValidToken(w, r.Header.Get("access_token")) {
+	if !isValidToken(w, r.Header.Get("access_token"), false) {
 		return
 	}
 
-	result := config.DB.Where("access_token = ?", r.Header.Get("access_token")).First(&models.User{})
+	result := config.DB.Where("access_token = ?", r.Header.Get("access_token")).First(&models.Users{})
 	if result.Error != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "There was a problem retrieving token from the database: " + result.Error.Error()})
 		return
 	}
 
-	log.Println("New get for user : " + fmt.Sprintf("%v", result.Value))
+	log.Println("/users/stats for : " + r.Header.Get("access_token") + ".")
 	json.NewEncoder(w).Encode(models.Response{Code: 0, Data: result.Value})
 }
