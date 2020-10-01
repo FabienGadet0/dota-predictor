@@ -1,3 +1,5 @@
+//go:generate swag init
+
 package main
 
 import (
@@ -6,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	_ "dota-predictor/docs"
 
 	"github.com/gorilla/mux"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -21,6 +25,14 @@ func balanceTonPort() string {
 	return ":" + port
 }
 
+// @title Dota-Predictor API
+// @version 1.0
+// @description This is the documentation for the golang api of dota-predictor
+
+// @contact.name API Support
+// @contact.email pierre.saintsorny@gmail.com
+
+// @BasePath /1.0
 func main() {
 	//initialize the database
 	config.InitDB()
@@ -30,6 +42,7 @@ func main() {
 	r := mux.NewRouter().StrictSlash(true)
 
 	log.Println("Starting server.")
+
 	handlers.HandleRequest(r)
 
 	log.Fatal(http.ListenAndServe(addr, r))

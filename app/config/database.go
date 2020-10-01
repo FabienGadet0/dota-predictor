@@ -24,6 +24,7 @@ func InitDB() {
 	if err = DB.DB().Ping(); err != nil {
 		log.Fatal("Failed to ping database:\n" + err.Error())
 	}
+	DB.SingularTable(true)
 
 	log.Println("Successfully connected to database!")
 }
