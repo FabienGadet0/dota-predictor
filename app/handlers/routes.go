@@ -36,6 +36,7 @@ func HandleRequest(router *mux.Router) {
 	r.HandleFunc("/users/stats", getUser).Methods("GET")
 	r.HandleFunc("/list-routes", listRoutes).Methods("GET")
 	r.HandleFunc("/model/predict/{match-id}", getPrediction).Methods("GET")
+	r.HandleFunc("/model/score/{max-line}", getPredictionPercentage).Methods("GET")
 
 	// Documentation
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
