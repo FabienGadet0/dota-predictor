@@ -94,6 +94,40 @@ var doc = `{
                 }
             }
         },
+        "/model/score/{max-line}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get prediction for specific match",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "423": {
+                        "description": "Locked",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/users/personnenetrouverajamaismaroutedecreationdutilisateur": {
             "post": {
                 "produces": [
