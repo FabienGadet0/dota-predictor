@@ -28,6 +28,32 @@ paths:
           schema:
             $ref: '#/definitions/models.Response'
       summary: Index of the api
+  /games-predicted:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "423":
+          description: Locked
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get rows of predictions
   /list-routes:
     get:
       produces:
@@ -38,6 +64,28 @@ paths:
           schema:
             type: string
       summary: List all routes defined in the api
+  /model/last-run:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.Response'
+        "423":
+          description: Locked
+          schema:
+            $ref: '#/definitions/models.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get last inserted date of a prediction
   /model/predict/{match-id}:
     get:
       produces:
@@ -69,19 +117,15 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/models.Response'
-        "423":
-          description: Locked
+        "400":
+          description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get prediction for specific match
+      summary: Get prediction percentage on last x games
   /users/personnenetrouverajamaismaroutedecreationdutilisateur:
     post:
       produces:
