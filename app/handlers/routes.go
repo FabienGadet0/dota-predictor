@@ -37,6 +37,8 @@ func HandleRequest(router *mux.Router) {
 	r.HandleFunc("/list-routes", listRoutes).Methods("GET")
 	r.HandleFunc("/model/predict/{match-id}", getPrediction).Methods("GET")
 	r.HandleFunc("/model/score/{max-line}", getPredictionPercentage).Methods("GET")
+	r.HandleFunc("/model/last-run", getPredictionFromLastDate).Methods("GET")
+	r.HandleFunc("/games-predicted", getPredictions).Methods("GET")
 
 	// Documentation
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
@@ -66,6 +68,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 // @Router /list-routes [get]
 func listRoutes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+
+	if !isValidToken(w, r.Header.Get("access_token"), false) {
+		return
+	}
 
 	json.NewEncoder(w).Encode(routes)
 }
