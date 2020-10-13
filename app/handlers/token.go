@@ -11,7 +11,7 @@ import (
 )
 
 // check the validity of the token and decrement a call if bool is true
-func isValidToken(w http.ResponseWriter, token string, decrementCall bool) bool {
+func isValidToken(w http.ResponseWriter, token string, decrementCall bool, isLevelGranted bool) bool {
 	var user models.Users
 
 	err := config.DB.Where("access_token = ?", token).Find(&user).Error
@@ -29,11 +29,19 @@ func isValidToken(w http.ResponseWriter, token string, decrementCall bool) bool 
 	if decrementCall {
 		if user.NBCallsLeft == 0 {
 			w.WriteHeader(http.StatusLocked)
-			json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "No call left available: " + err.Error()})
+			json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "No call left available."})
 			return false
 		}
 		user.NBCallsLeft--
 		config.DB.Save(&user)
+	}
+
+	if isLevelGranted {
+		if user.GrantLvl != 1 {
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "Access forbidden for this user (grant_lvl = 0)."})
+			return false
+		}
 	}
 
 	log.Println("User " + token + " verified.")

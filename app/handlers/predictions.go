@@ -23,7 +23,7 @@ import (
 func getPrediction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	if !isValidToken(w, r.Header.Get("access_token"), true) {
+	if !isValidToken(w, r.Header.Get("access_token"), true, false) {
 		return
 	}
 
@@ -47,7 +47,7 @@ func getPrediction(w http.ResponseWriter, r *http.Request) {
 func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	if !isValidToken(w, r.Header.Get("access_token"), false) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
 		return
 	}
 
@@ -71,7 +71,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var data []Data
-	result := config.DB.Raw(`select g.match_id, g.start_date , g.winner_name, g.winner_name = p.predict_name as prediction_is_correct 
+	result := config.DB.Raw(`select g.match_id, g.start_date , g.winner_name, p.predict_name = g.winner as prediction_is_correct 
 	from games g 
 	inner join prediction p on p.match_id = g.match_id and p.predict_name is not null 
 	order by g.start_date desc limit 50`).Scan(&data)
@@ -120,7 +120,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	if !isValidToken(w, r.Header.Get("access_token"), false) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}
 
@@ -165,12 +165,12 @@ func getPredictions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !isValidToken(w, r.Header.Get("access_token"), false) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
 		return
 	}
 
 	var data []models.Prediction
-	result := config.DB.Raw(`select p.* from prediction as p left join games as g on g.match_id = p.match_id order by inserted_date desc limit 10 offset ?`, offset).Scan(&data)
+	result := config.DB.Raw(`select p.* from prediction as p left join games as g on g.match_id = p.match_id order by inserted_date desc limit 25 offset ?`, offset).Scan(&data)
 	if result.Error != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "There was a problem retrieving the predictions from the database: " + result.Error.Error()})

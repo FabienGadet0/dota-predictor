@@ -12,7 +12,7 @@ func Pagination(page string) (string, error) {
 		return "", err
 	}
 	if offset > 1 {
-		offset *= 10 / 2
+		offset *= 25 - 25
 	} else if offset == 1 {
 		offset = 0
 	} else {
