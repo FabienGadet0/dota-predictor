@@ -69,7 +69,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 func listRoutes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 
-	if !isValidToken(w, r.Header.Get("access_token"), false) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}
 
