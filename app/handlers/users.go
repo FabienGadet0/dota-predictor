@@ -22,7 +22,7 @@ import (
 // @Router /users/personnenetrouverajamaismaroutedecreationdutilisateur [post]
 func createUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	token, err := helpers.TokenGenerator()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -59,7 +59,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 // @Router /users/stats [get]
 func getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) || (*r).Method == "OPTIONS" {
 		return
 	}

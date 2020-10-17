@@ -22,7 +22,7 @@ import (
 // @Router /model/predict/{match-id} [get]
 func getPrediction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), true, false) || (*r).Method == "OPTIONS" {
 		return
 	}
@@ -45,7 +45,7 @@ func getPrediction(w http.ResponseWriter, r *http.Request) {
 // @Router /model/score/{max-line} [get]
 func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), false, true) || (*r).Method == "OPTIONS" {
 		return
 	}
@@ -118,7 +118,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 // @Router /model/last-run [get]
 func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) || (*r).Method == "OPTIONS" {
 		return
 	}
@@ -149,7 +149,7 @@ func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 // @Router /games-predicted [get]
 func getPredictions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	query, ok := r.URL.Query()["page"]
 	if !ok || len(query[0]) < 1 {
 		w.WriteHeader(http.StatusBadRequest)
