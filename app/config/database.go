@@ -3,13 +3,9 @@ package config
 import (
 	"log"
 	"os"
-	"net/http"
 	"github.com/jinzhu/gorm"
 )
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
 
 var (
 	//DB ...

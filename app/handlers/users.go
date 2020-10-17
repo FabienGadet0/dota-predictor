@@ -12,6 +12,11 @@ import (
 	"strconv"
 )
 
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 // @Summary Create an user
 // @Produce json
 // @Success 200 {object} models.Response

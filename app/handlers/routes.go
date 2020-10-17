@@ -12,6 +12,11 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
 var (
 	routes []string
 )
