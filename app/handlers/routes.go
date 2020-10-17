@@ -24,7 +24,6 @@ func gorillaWalkFn(route *mux.Route, router *mux.Router, ancestors []*mux.Route)
 		return nil
 	}
 	routes = append(routes, path)
-handler := cors.Default().Handler(r)
 	return nil
 }
 
