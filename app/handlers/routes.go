@@ -13,9 +13,6 @@ import (
 )
 
 
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
 
 var (
 	routes []string
@@ -73,7 +70,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 // @Router /list-routes [get]
 func listRoutes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-	enableCors(&w)
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}

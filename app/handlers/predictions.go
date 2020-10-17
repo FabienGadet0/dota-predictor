@@ -13,11 +13,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}
-
 // @Summary Get prediction for specific match
 // @Produce json
 // @Success 200 {object} models.Response
@@ -27,7 +22,7 @@ func enableCors(w *http.ResponseWriter) {
 // @Router /model/predict/{match-id} [get]
 func getPrediction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	enableCors(&w)
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), true, false) {
 		return
 	}
@@ -51,7 +46,7 @@ func getPrediction(w http.ResponseWriter, r *http.Request) {
 // @Router /model/score/{max-line} [get]
 func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	enableCors(&w)
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
 		return
 	}
@@ -124,7 +119,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 // @Router /model/last-run [get]
 func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	enableCors(&w)
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}
@@ -155,7 +150,7 @@ func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 // @Router /games-predicted [get]
 func getPredictions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	enableCors(&w)
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 	query, ok := r.URL.Query()["page"]
 	if !ok || len(query[0]) < 1 {
 		w.WriteHeader(http.StatusBadRequest)
