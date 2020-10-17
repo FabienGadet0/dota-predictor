@@ -14,8 +14,7 @@ import (
 // check the validity of the token and decrement a call if bool is true
 func isValidToken(w http.ResponseWriter, token string, decrementCall bool, isLevelGranted bool) bool {
 	var user models.Users
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods" , "GET, POST, OPTIONS")
+	
 	err := config.DB.Where("access_token = ?", token).Find(&user).Error
 	if err == gorm.ErrRecordNotFound {
 		w.WriteHeader(http.StatusNotFound)

@@ -24,7 +24,7 @@ func gorillaWalkFn(route *mux.Route, router *mux.Router, ancestors []*mux.Route)
 		return nil
 	}
 	routes = append(routes, path)
-
+handler := cors.Default().Handler(r)
 	return nil
 }
 
@@ -70,7 +70,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 // @Router /list-routes [get]
 func listRoutes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 w.Header().Set("Access-Control-Allow-Methods" , "GET, POST, OPTIONS")
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) || (*r).Method == "OPTIONS" {
 		return
