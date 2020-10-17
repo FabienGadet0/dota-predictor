@@ -23,10 +23,9 @@ import (
 func getPrediction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().set("Access-Control-Allow-Origin", "*")
-	if !isValidToken(w, r.Header.Get("access_token"), true, false) {
+	if !isValidToken(w, r.Header.Get("access_token"), true, false) || (*r).Method == "OPTIONS" {
 		return
 	}
-
 	result := config.DB.Where("match_id = ?", mux.Vars(r)["match-id"]).First(&models.Prediction{})
 	if result.Error != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -47,7 +46,7 @@ func getPrediction(w http.ResponseWriter, r *http.Request) {
 func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().set("Access-Control-Allow-Origin", "*")
-	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) || (*r).Method == "OPTIONS" {
 		return
 	}
 
@@ -120,7 +119,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().set("Access-Control-Allow-Origin", "*")
-	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, false) || (*r).Method == "OPTIONS" {
 		return
 	}
 
@@ -165,7 +164,7 @@ func getPredictions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) || (*r).Method == "OPTIONS" {
 		return
 	}
 
