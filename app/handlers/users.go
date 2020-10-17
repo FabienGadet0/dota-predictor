@@ -19,7 +19,7 @@ import (
 // @Router /users/personnenetrouverajamaismaroutedecreationdutilisateur [post]
 func createUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
+	enableCors(&w)
 	token, err := helpers.TokenGenerator()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -56,7 +56,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 // @Router /users/stats [get]
 func getUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
+	enableCors(&w)
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}

@@ -68,7 +68,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 // @Router /list-routes [get]
 func listRoutes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-
+	enableCors(&w)
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}
