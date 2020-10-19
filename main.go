@@ -46,7 +46,10 @@ func main() {
 	log.Println("Starting server.")
 
 	handlers.HandleRequest(r)
-	handler := cors.Default().Handler(r)
+	// handler := cors.Default().Handler(r)
+	corsObj:=handlers.AllowedOrigins([]string{"*"})
 
-	log.Fatal(http.ListenAndServe(addr, handler))
+	
+    // handler := c.Handler(r)
+	log.Fatal(http.ListenAndServe(addr, handlers.CORS(corsObj)(r)))
 }
