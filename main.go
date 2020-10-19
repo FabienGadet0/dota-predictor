@@ -47,9 +47,6 @@ func main() {
 
 	handlers.HandleRequest(r)
 	handler := cors.Default().Handler(r)
-	corsObj:=handlers.AllowedOrigins([]string{"*"})
 
-	
-    // handler := c.Handler(r)
-	log.Fatal(http.ListenAndServe(addr, handlers.CORS(corsObj)(r)))
+	log.Fatal(http.ListenAndServe(addr, handler))
 }
