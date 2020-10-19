@@ -12,8 +12,6 @@ import (
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
-
-
 var (
 	routes []string
 )
@@ -40,6 +38,12 @@ func HandleRequest(router *mux.Router) {
 	r.HandleFunc("/model/score/{max-line}", getPredictionPercentage).Methods("GET")
 	r.HandleFunc("/model/last-run", getPredictionFromLastDate).Methods("GET")
 	r.HandleFunc("/games-predicted", getPredictions).Methods("GET")
+	r.HandleFunc("/model-name", getModelsNames).Methods("GET")
+
+	r.HandleFunc("/predict/live", getLiveGames).Methods("GET")
+	r.HandleFunc("/predict/recent-games", getRecentGames).Methods("GET")
+	r.HandleFunc("/predict/all", getAllGames).Methods("GET")
+	r.HandleFunc("/train", getModelTrained).Methods("GET")
 
 	// Documentation
 	r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
@@ -69,7 +73,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 // @Router /list-routes [get]
 func listRoutes(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
-w.Header().Set("Access-Control-Allow-Methods" , "GET, POST, OPTIONS")
+
 	if !isValidToken(w, r.Header.Get("access_token"), false, false) || (*r).Method == "OPTIONS" {
 		return
 	}

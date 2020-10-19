@@ -22,8 +22,8 @@ import (
 // @Router /model/predict/{match-id} [get]
 func getPrediction(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	
-	if !isValidToken(w, r.Header.Get("access_token"), true, false) || (*r).Method == "OPTIONS" {
+
+	if !isValidToken(w, r.Header.Get("access_token"), true, false) {
 		return
 	}
 	result := config.DB.Where("match_id = ?", mux.Vars(r)["match-id"]).First(&models.Prediction{})
@@ -45,8 +45,8 @@ func getPrediction(w http.ResponseWriter, r *http.Request) {
 // @Router /model/score/{max-line} [get]
 func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	
-	if !isValidToken(w, r.Header.Get("access_token"), false, true) || (*r).Method == "OPTIONS" {
+
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
 		return
 	}
 
@@ -73,6 +73,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	result := config.DB.Raw(`select g.match_id, g.start_date , g.winner_name, p.predict_name = g.winner as prediction_is_correct 
 	from games g 
 	inner join prediction p on p.match_id = g.match_id and p.predict_name is not null 
+	where p.model_name = 'main'
 	order by g.start_date desc limit 50`).Scan(&data)
 
 	if result.Error != nil || len(data) == 0 {
@@ -118,8 +119,8 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 // @Router /model/last-run [get]
 func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	
-	if !isValidToken(w, r.Header.Get("access_token"), false, false) || (*r).Method == "OPTIONS" {
+
+	if !isValidToken(w, r.Header.Get("access_token"), false, false) {
 		return
 	}
 
@@ -149,7 +150,7 @@ func getPredictionFromLastDate(w http.ResponseWriter, r *http.Request) {
 // @Router /games-predicted [get]
 func getPredictions(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	
+
 	query, ok := r.URL.Query()["page"]
 	if !ok || len(query[0]) < 1 {
 		w.WriteHeader(http.StatusBadRequest)
@@ -164,7 +165,7 @@ func getPredictions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if !isValidToken(w, r.Header.Get("access_token"), false, true) || (*r).Method == "OPTIONS" {
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
 		return
 	}
 
@@ -178,4 +179,36 @@ func getPredictions(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("/games-predicted for : " + r.Header.Get("access_token") + ".")
 	json.NewEncoder(w).Encode(models.Response{Code: 0, Data: data})
+}
+
+// @Summary Get all models name
+// @Produce json
+// @Success 200 {object} models.Response
+// @Failure 500 {object} models.Response
+// @Failure 404 {object} models.Response
+// @Router /model-name [get]
+func getModelsNames(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	if !isValidToken(w, r.Header.Get("access_token"), false, true) {
+		return
+	}
+
+	type Data struct {
+		ModelName string
+	}
+	var data []Data
+	result := config.DB.Raw(`select distinct model_name from prediction`).Scan(&data)
+	if result.Error != nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "There was a problem retrieving the models names from the database: " + result.Error.Error()})
+		return
+	}
+	var d []string
+	for _, x := range data {
+		d = append(d, x.ModelName)
+	}
+
+	log.Println("/model-name for : " + r.Header.Get("access_token") + ".")
+	json.NewEncoder(w).Encode(models.Response{Code: 0, Data: d})
 }
