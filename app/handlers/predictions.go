@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"dota-predictor/app/config"
-	"dota-predictor/app/helpers"
 	"dota-predictor/app/models"
 	"encoding/json"
 	"log"
