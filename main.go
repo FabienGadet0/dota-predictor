@@ -11,6 +11,8 @@ import (
 
 	_ "dota-predictor/docs"
 
+	"github.com/rs/cors"
+
 	"github.com/gorilla/mux"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -44,7 +46,7 @@ func main() {
 	log.Println("Starting server.")
 
 	handlers.HandleRequest(r)
-	//	handler := cors.Default().Handler(r)
+	handler := cors.Default().Handler(r)
 
-	log.Fatal(http.ListenAndServe(addr, r))
+	log.Fatal(http.ListenAndServe(addr, handler))
 }
