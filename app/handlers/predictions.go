@@ -171,7 +171,7 @@ func getPredictions(w http.ResponseWriter, r *http.Request) {
 
 	type Data struct {
 		MatchID             int
-		StartTime           *time.Time
+		StartDate           *time.Time
 		InsertedDate        *time.Time
 		PredictProba        string
 		PredictName         string
@@ -181,7 +181,7 @@ func getPredictions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var data Data
-	result := config.DB.Raw(`select p.*, g.radiant_team , g.dire_team, g.radiant_score, g.dire_score, g.start_time from prediction as p left join games as g on g.match_id = p.match_id order by inserted_date desc limit 25 offset ?`, offset).Scan(&data)
+	result := config.DB.Raw(`select p.*, g.radiant_team , g.dire_team, g.radiant_score, g.dire_score, g.start_date from prediction as p left join games as g on g.match_id = p.match_id order by inserted_date desc limit 25 offset ?`, offset).Scan(&data)
 	if result.Error != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "There was a problem retrieving the predictions from the database: " + result.Error.Error()})
