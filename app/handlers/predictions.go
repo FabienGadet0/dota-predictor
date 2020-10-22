@@ -56,9 +56,9 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "There was a problem converting max-line" + err.Error()})
 		return
 	}
-	if mxline != 5 && mxline != 10 && mxline != 20 && mxline != 50 {
+	if mxline < 5 {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "Please enter 5, 10, 20 or 50 as a maximum number of lines"})
+		json.NewEncoder(w).Encode(models.Response{Code: -1, Message: "Please enter a minimum lines > 5"})
 		return
 	}
 
@@ -74,7 +74,7 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 	from games g 
 	inner join prediction p on p.match_id = g.match_id and p.predict_name is not null 
 	where p.model_name = 'main'
-	order by g.start_date desc limit 50`).Scan(&data)
+	order by g.start_date desc limit ?`, mxline).Scan(&data)
 
 	if result.Error != nil || len(data) == 0 {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -87,6 +87,11 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 
 	score = make(map[int]float64)
 
+		
+	if len(data) < mxline {
+		mxline = len(data)
+	}
+
 	for x, d := range data {
 		if d.PredictionIsCorrect {
 			countTrue++
@@ -94,16 +99,13 @@ func getPredictionPercentage(w http.ResponseWriter, r *http.Request) {
 		switch v := x + 1; v {
 		case 5:
 			score[5] = countTrue / 5
-		case 10:
-			score[10] = countTrue / 10
-		case 20:
-			score[20] = countTrue / 20
-		case 50:
-			score[50] = countTrue / 50
+		case mxline / 3:
+			score[int(mxline / 3)] = countTrue / float64(mxline / 3)
+		case mxline / 2:
+			score[int(mxline / 2)] = countTrue / float64(mxline / 2)
+		case mxline:
+			score[int(mxline)] = countTrue / float64(mxline)
 		}
-	}
-	if len(data) < mxline {
-		score[len(data)] = countTrue / float64(len(data))
 	}
 
 	log.Println("/model/score/{max-line} for : " + r.Header.Get("access_token") + ".")
