@@ -38,6 +38,7 @@ func HandleRequest(router *mux.Router) {
 	r.HandleFunc("/model/score/{max-line}", getPredictionPercentage).Methods("GET")
 	r.HandleFunc("/model/last-run", getPredictionFromLastDate).Methods("GET")
 	r.HandleFunc("/games-predicted", getPredictions).Methods("GET")
+	r.HandleFunc("/games-predicted-live", getPredictionsLive).Methods("GET")
 	r.HandleFunc("/model-name", getModelsNames).Methods("GET")
 
 	r.HandleFunc("/predict/live", getLiveGames).Methods("GET")
