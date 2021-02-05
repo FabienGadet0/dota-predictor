@@ -25,6 +25,15 @@ func gorillaWalkFn(route *mux.Route, router *mux.Router, ancestors []*mux.Route)
 	return nil
 }
 
+func fooHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    if r.Method == http.MethodOptions {
+        return
+    }
+
+    w.Write([]byte("foo"))
+}
+
 // HandleRequest gere toute les routes du serveur HTTP
 func HandleRequest(router *mux.Router) {
 	// Subrouter to get the url match with the api version
@@ -40,7 +49,7 @@ func HandleRequest(router *mux.Router) {
 	r.HandleFunc("/games-predicted", getPredictions).Methods("GET")
 	r.HandleFunc("/games-predicted-live", getPredictionsLive).Methods("GET")
 	r.HandleFunc("/model-name", getModelsNames).Methods("GET")
-
+	r.HandleFunc("/foo", fooHandler).Methods(http.MethodGet, http.MethodPut, http.MethodPatch, http.MethodOptions)
 	r.HandleFunc("/predict/live", getLiveGames).Methods("GET")
 	r.HandleFunc("/predict/recent-games", getRecentGames).Methods("GET")
 	r.HandleFunc("/predict/all", getAllGames).Methods("GET")

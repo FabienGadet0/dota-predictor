@@ -46,7 +46,7 @@ func main() {
 	log.Println("Starting server.")
 
 	handlers.HandleRequest(r)
+    r.Use(mux.CORSMethodMiddleware(r))
 	handler := cors.Default().Handler(r)
-
 	log.Fatal(http.ListenAndServe(addr, handler))
 }
